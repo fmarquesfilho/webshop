@@ -1,17 +1,10 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
-
-// funções para cada rota (endpoint)
-async fn ping() -> impl Responder {
-    HttpResponse::Ok().finish()
-}
+//! src/main.rs
+ 
+use projetoweb2::run;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
-        App::new()
-            .route("/ping", web::get().to(ping))
-    })
-    .bind("127.0.0.1:8000")?
-    .run()
-    .await
+    // Joga io::Error se o bind falhas
+    // Caso contrário chama .await no servidor
+    run()?.await
 }
