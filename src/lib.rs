@@ -7,16 +7,21 @@ async fn ping() -> HttpResponse {
     HttpResponse::Ok().finish()
 }
 
-// Notice the different signature!
-// We return `Server` on the happy path and we dropped the `async` keyword
-// We have no .await call, so it is not needed anymore.
+async fn subscribe() -> HttpResponse {
+    HttpResponse::Ok().finish()
+}
+
+// Notem a assinatura diferente da função (adicionamos pub)
+// Nós retornamos a variável 'Server' quando dá tudo certo e não usamos mais o async 
+// Não há mais a chamada para .async, pois não é mais necessária.
 pub fn run() -> Result<Server, std::io::Error> {
     let server = HttpServer::new(|| {
             App::new()
                 .route("/ping", web::get().to(ping))
-        })
-        .bind("127.0.0.1:8000")?
-        .run();
-    // No .await here!
+                .route("/subscriptions", web::post().to(subscribe))
+    })
+    .bind("127.0.0.1:8000")?
+    .run();
+    // Retiramos o .await
     Ok(server)
 }
