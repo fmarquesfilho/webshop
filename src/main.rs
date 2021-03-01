@@ -1,6 +1,5 @@
 //! src/main.rs
- 
-use projetoweb2::run;
+use projetoweb2::startup::run;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
