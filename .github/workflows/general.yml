@@ -2,18 +2,6 @@ name: Rust
 
 on: push
 
-# on:
-#   # NB: this differs from the book's project!
-#   # These settings allow us to run this specific CI pipeline for PRs against
-#   # this specific branch (a.k.a. book chapter).
-#   push:
-#     branches:
-#       - root-chapter-03-part1
-#   pull_request:
-#     types: [ opened, synchronize, reopened ]
-#     branches:
-#       - root-chapter-03-part1
-
 env:
   CARGO_TERM_COLOR: always
 
@@ -45,50 +33,6 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-
-  fmt:
-    name: Rustfmt
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: rustfmt
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
-
-  clippy:
-    name: Clippy
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:12
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          components: clippy
-          toolchain: stable
-          override: true
-      - name: Migrate database
-        run: |
-          sudo apt-get install libpq-dev -y
-          cargo install --version=0.5.1 sqlx-cli --no-default-features --features postgres
-          SKIP_DOCKER=true ./scripts/init_db.sh
-      - uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: -- -D warnings
 
   coverage:
     name: Code coverage
