@@ -30,7 +30,7 @@
     <li>
       <a href="#about-the-project">Sobre o projeto</a>
       <ul>
-        <li><a href="#built-with">Dependências</a></li>
+        <li><a href="#built-with">Desenvolvido com</a></li>
       </ul>
     </li>
     <li>
