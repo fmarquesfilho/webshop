@@ -1,13 +1,3 @@
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -50,6 +40,7 @@
         <li><a href="#installation">Instalação</a></li>
       </ul>
     </li>
+    <li><a href="#endpoints">Endpoints</a></li>
     <li><a href="#usage">Usando a API</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contribuições</a></li>
@@ -64,9 +55,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Sobre o projeto
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-webshop é uma API... (detalhar) e incluir estórias de usuário.
+webshop é uma API para... (explicar o que faz).
 
 
 ### Desenvolvido com
@@ -101,6 +90,10 @@ Listar as coisas de que você precisa para usar o software e como instalá-las (
    cargo test
    ```
 
+<!-- ENDPOINTS -->
+# Endpoints
+
+Detalhar todas as rotas da API.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
