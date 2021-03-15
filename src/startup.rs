@@ -1,6 +1,6 @@
 //! src/startup.rs
 use crate::configuration::{DatabaseSettings, Settings};
-use crate::routes::{ping, subscribe};
+use crate::routes::*;
 use actix_web::dev::Server;
 use actix_web::web::Data;
 use actix_web::{web, App, HttpServer};
@@ -55,6 +55,8 @@ fn run(
         App::new()
             .route("/ping", web::get().to(ping))
             .route("/subscriptions", web::post().to(subscribe))
+            .route("/cart", web::post().to(create_cart))
+            .route("/users", web::post().to(create_user))
             .app_data(db_pool.clone())
     })
     .listen(listener)?

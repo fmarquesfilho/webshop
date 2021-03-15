@@ -1,6 +1,6 @@
 //! src/main.rs
-use projetoweb2::configuration::get_configuration;
-use projetoweb2::startup::Application;
+use webshop::configuration::get_configuration;
+use webshop::startup::Application;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

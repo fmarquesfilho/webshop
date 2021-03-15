@@ -1,5 +1,5 @@
 [package]
-name = "projetoweb2"
+name = "webshop"
 version = "0.1.0"
 authors = ["Fernando Filho <fernando@dimap.ufrn.br>"]
 edition = "2018"
@@ -9,7 +9,7 @@ path = "src/lib.rs"
 
 [[bin]]
 path = "src/main.rs"
-name = "projetoweb2"
+name = "webshop"
 
 [dependencies]
 actix = "0.11.0-beta.2"
@@ -18,7 +18,7 @@ actix-rt = "2.0.2"
 serde = "1.0.124"
 serde-aux = "1.0.1"
 config = { version = "0.10.1", default-features = false, features = ["yaml"] }
-sqlx = { version = "0.4.1", default-features = false, features = [ "runtime-async-std-native-tls", "macros", "postgres", "uuid", "chrono", "migrate"]  }
+sqlx = { version = "0.4.1", default-features = false, features = [ "runtime-async-std-native-tls", "macros", "postgres", "uuid", "chrono", "migrate", "bigdecimal"]  }
 async-std = { version = "1.6", features = [ "attributes" ] }
 uuid = { version = "0.8.2", features = ["v4"] }
 chrono = "0.4"

@@ -1,29 +1,25 @@
 use actix_web::{web, HttpResponse};
-use chrono::Utc;
-use sqlx::PgPool;
-use uuid::Uuid;
+use sqlx::{PgPool};
 
 #[derive(serde::Deserialize)]
-pub struct FormData {
+pub struct Subscription {
     email: String,
     name: String
 }
 
 pub async fn subscribe(
-    form: web::Form<FormData>,
-    pool: web::Data<PgPool>, // Renamed!
+    subscription: web::Json<Subscription>,
+    pool: web::Data<PgPool>,
 ) -> Result<HttpResponse, HttpResponse> {
-    sqlx::query!(
+    sqlx::query_as!(
+        Subcription,
         r#"
-        INSERT INTO subscriptions (id, email, name, subscribed_at)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO subscriptions (email, name)
+        VALUES ($1, $2)
         "#,
-        Uuid::new_v4(),
-        form.email,
-        form.name,
-        Utc::now()
+        subscription.email,
+        subscription.name
     )
-    // We got rid of the double-wrapping using .app_data()
     .execute(pool.get_ref())
     .await
     .map_err(|e| {

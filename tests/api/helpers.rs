@@ -1,6 +1,6 @@
 //! tests/helpers.rs
-use projetoweb2::configuration::{get_configuration, DatabaseSettings};
-use projetoweb2::startup::{get_connection_pool, Application};
+use webshop::configuration::{get_configuration, DatabaseSettings};
+use webshop::startup::{get_connection_pool, Application};
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 

@@ -1,15 +1,19 @@
 use crate::helpers::create_app;
+use std::collections::HashMap;
 
 #[actix_rt::test]
 async fn subscribe_returns_a_200() {
     let app = create_app().await;
     let client = reqwest::Client::new();
-    let body = "name=da%20silva&email=joao_da_silva%40gmail.com";
+    let mut map = HashMap::new();
+    map.insert("name", "da silva");
+    map.insert("email", "joao_da_silva@gmail.com");
+    //let body = "name=da%20silva&email=joao_da_silva%40gmail.com";
 
     let response = client
         .post(&format!("{}/subscriptions", &app.address))
-        .header("Content-Type", "application/x-www-form-urlencoded")
-        .body(body)
+        .header("Content-Type", "application/json")
+        .json(&map)
         .send()
         .await
         .expect("Failed to execute request.");
