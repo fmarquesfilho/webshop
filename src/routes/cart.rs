@@ -10,13 +10,18 @@ pub struct Cart {
     pub id: Uuid,
     #[serde(with = "my_uuid")]
     pub user_id: Uuid,
-    pub active: bool,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct CartData {
     #[serde(with = "my_uuid")]
     pub user_id: Uuid,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct CartId {
+    #[serde(with = "my_uuid")]
+    pub id: Uuid,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -34,23 +39,27 @@ pub async fn create_cart(
     pool: web::Data<PgPool>,
 ) -> Result<HttpResponse, HttpResponse> {
 
-    sqlx::query_as!(
-        Cart,
+    let id = Uuid::new_v4();
+    sqlx::query!(
         r#"
-        INSERT INTO carts (id, user_id, active)
-        VALUES ($1, $2, $3)
+        INSERT INTO carts (id, user_id)
+        VALUES ($1, $2)
+        RETURNING id
         "#,
-        Uuid::new_v4(),
+        id,
         cart.user_id,
-        true
     )
-    .execute(pool.get_ref())
+    .fetch_one(pool.get_ref())
     .await
     .map_err(|e| {
         eprintln!("Failed to execute query: {}", e);
         HttpResponse::InternalServerError().finish()
     })?;
-    Ok(HttpResponse::Ok().finish())
+
+    //Ok(HttpResponse::Ok().finish())
+    Ok(HttpResponse::Ok().json(CartId {
+        id: id,
+    }))
 }
 
 pub async fn add_product_to_cart(

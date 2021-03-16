@@ -42,11 +42,10 @@ async fn create_cart_returns_200() {
 
     assert_eq!(200, response.status().as_u16());
 
-    let saved = sqlx::query!("SELECT id, user_id, active FROM carts",)
+    let saved = sqlx::query!("SELECT user_id FROM carts")
         .fetch_one(&app.db_pool)
         .await
         .expect("Failed to fetch saved cart.");
 
     assert_eq!(saved.user_id, user_id.id);
-    assert_eq!(saved.active, true);
 }

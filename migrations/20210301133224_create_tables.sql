@@ -17,7 +17,6 @@ CREATE TABLE carts(
 	   id uuid NOT NULL,
 	   PRIMARY KEY (id),
 	   user_id uuid NOT NULL,
-	   active BOOLEAN NOT NULL DEFAULT TRUE,
 	   FOREIGN KEY (user_id) REFERENCES users (id)
 );
 

@@ -38,7 +38,7 @@ pub async fn create_user(
         "#,
         id,
         user.username,
-        user.password, // temporário
+        user.password,
     )
     .fetch_one(pool.get_ref())
     .await

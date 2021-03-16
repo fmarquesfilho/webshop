@@ -1,6 +1,6 @@
 use crate::helpers::create_app;
+use webshop::routes::UserData;
 use std::collections::HashMap;
-use sqlx::{types::Uuid};
 
 #[actix_rt::test]
 async fn create_user_returns_200() {
@@ -9,11 +9,11 @@ async fn create_user_returns_200() {
 
     let user = UserData {
         username: String::from("joselito"),
-        password: String::from(""), //temporário
+        password: String::from("abc"), //temporário
     };
     let mut map = HashMap::new();
-    map.insert("username", user.username);
-    map.insert("password", user.password);
+    map.insert("username", user.username.clone());
+    map.insert("password", user.password.clone());
 
     let response = client
         .post(&format!("{}/users", &app.address))
@@ -23,14 +23,12 @@ async fn create_user_returns_200() {
         .await
         .expect("Failed to execute request.");
 
-
     assert_eq!(200, response.status().as_u16());
 
-    let saved = sqlx::query!("SELECT id, username, password FROM users WHERE id = {}", response.id)
+    let saved = sqlx::query!("SELECT username FROM users")
         .fetch_one(&app.db_pool)
         .await
-        .expect("Failed to fetch saved cart.");
+        .expect("Failed to fetch saved user.");
 
     assert_eq!(saved.username, user.username);
-    assert_eq!(saved.password, user.password);
 }
