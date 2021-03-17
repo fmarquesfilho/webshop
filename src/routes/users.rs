@@ -4,7 +4,6 @@ use sqlx::{PgPool, types::Uuid};
 //use uuid::Uuid;
 use super::serializers::my_uuid;
 
-
 #[derive(Serialize, Deserialize)]
 pub struct User {
     #[serde(with = "my_uuid")]
@@ -85,9 +84,8 @@ pub async fn get_user_by_id(
     pool: web::Data<PgPool>
 ) -> Result<HttpResponse, HttpResponse>  {
 
-    //let id = req.match_info().query("id");
-    //let id = Uuid::parse_str(id);
-    let id = Uuid::new_v4();
+    let id:Uuid = req.match_info().get("id").unwrap().parse().unwrap();
+    //let id = Uuid::new_v4();
     let row = sqlx::query!(
         r#"
         SELECT id, username
