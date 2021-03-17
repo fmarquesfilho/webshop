@@ -1,7 +1,7 @@
 use crate::helpers::create_app;
 
 #[actix_rt::test]
-async fn ping() {
+async fn ping_returns_200_and_no_body() {
     let app = create_app().await;
     let client = reqwest::Client::new();
 

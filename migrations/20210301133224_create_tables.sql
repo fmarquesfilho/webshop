@@ -27,10 +27,9 @@ CREATE TABLE products(
 	   name TEXT NOT NULL
 );
 
--- Create Cart-Products Table
-CREATE TABLE cart_products(
+-- Create Cart Items Table
+CREATE TABLE cart_items(
 	   cart_id uuid NOT NULL,
-       product_id uuid NOT NULL,
-	   FOREIGN KEY (cart_id) REFERENCES carts (id),
-       FOREIGN KEY (product_id) REFERENCES products (id)
+	   product_id uuid NOT NULL,
+	   FOREIGN KEY (cart_id) REFERENCES carts (id)
 );

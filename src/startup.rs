@@ -56,7 +56,9 @@ fn run(
             .route("/ping", web::get().to(ping))
             .route("/subscriptions", web::post().to(subscribe))
             .route("/cart", web::post().to(create_cart))
+            .route("/cart/products", web::post().to(add_product_to_cart))
             .route("/users", web::post().to(create_user))
+            .route("/products", web::post().to(create_product))
             .app_data(db_pool.clone())
     })
     .listen(listener)?

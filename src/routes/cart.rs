@@ -1,21 +1,20 @@
 use actix_web::{web, HttpResponse};
 use sqlx::{PgPool, types::Uuid};
-//use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 use super::serializers::my_uuid;
 
-#[derive(Serialize, Deserialize)]
-pub struct Cart {
-    #[serde(with = "my_uuid")]
-    pub id: Uuid,
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CartData {
     #[serde(with = "my_uuid")]
     pub user_id: Uuid,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct CartData {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CartItem {
     #[serde(with = "my_uuid")]
-    pub user_id: Uuid,
+    pub cart_id: Uuid,
+    #[serde(with = "my_uuid")]
+    pub product_id: Uuid,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -24,23 +23,13 @@ pub struct CartId {
     pub id: Uuid,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct CartProduct {
-    #[serde(with = "my_uuid")]
-    pub cart_id: Uuid,
-    #[serde(with = "my_uuid")]
-    pub product_id: Uuid,
-}
-
-
-//impl Cart {
 pub async fn create_cart(
     cart: web::Json<CartData>,
     pool: web::Data<PgPool>,
 ) -> Result<HttpResponse, HttpResponse> {
 
     let id = Uuid::new_v4();
-    sqlx::query!(
+    let rec = sqlx::query!(
         r#"
         INSERT INTO carts (id, user_id)
         VALUES ($1, $2)
@@ -56,32 +45,35 @@ pub async fn create_cart(
         HttpResponse::InternalServerError().finish()
     })?;
 
-    //Ok(HttpResponse::Ok().finish())
+
     Ok(HttpResponse::Ok().json(CartId {
-        id: id,
+        id: rec.id,
     }))
 }
 
 pub async fn add_product_to_cart(
-    cart_product: web::Json<CartProduct>,
+    cart_item: web::Json<CartItem>,
     pool: web::Data<PgPool>,
 ) -> Result<HttpResponse, HttpResponse> {
-    sqlx::query_as!(
-        CartProduct,
+
+    //let cart_id = req.match_info().get("cart_id");
+    //let product_id = req.match_info().get("product_id");
+
+    sqlx::query!(
         r#"
-        INSERT INTO cart_products (cart_id, product_id)
+        INSERT INTO cart_items (cart_id, product_id)
         VALUES ($1, $2)
+        RETURNING cart_id, product_id
         "#,
-        cart_product.cart_id,
-        cart_product.product_id
+        cart_item.cart_id,
+        cart_item.product_id,
     )
-    .execute(pool.get_ref())
+    .fetch_one(pool.get_ref())
     .await
     .map_err(|e| {
         eprintln!("Failed to execute query: {}", e);
         HttpResponse::InternalServerError().finish()
     })?;
+
     Ok(HttpResponse::Ok().finish())
 }
-
-//}
