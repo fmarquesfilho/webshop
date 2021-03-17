@@ -31,5 +31,6 @@ CREATE TABLE products(
 CREATE TABLE cart_items(
 	   cart_id uuid NOT NULL,
 	   product_id uuid NOT NULL,
-	   FOREIGN KEY (cart_id) REFERENCES carts (id)
+	   FOREIGN KEY (cart_id) REFERENCES carts (id),
+	   FOREIGN KEY (product_id) REFERENCES products (id)
 );
