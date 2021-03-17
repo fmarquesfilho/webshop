@@ -7,8 +7,8 @@ use super::serializers::my_uuid;
 #[derive(Serialize, Deserialize)]
 pub struct User {
     #[serde(with = "my_uuid")]
-    id: Uuid,
-    username: String,
+    pub id: Uuid,
+    pub username: String,
 }
 
 #[derive(Deserialize)]
@@ -27,14 +27,13 @@ pub async fn create_user(
     pool: web::Data<PgPool>,
 ) -> Result<HttpResponse, HttpResponse>  {
 
-    let id = Uuid::new_v4();
-    sqlx::query!(
+    let row = sqlx::query!(
         r#"
         INSERT INTO users (id, username)
         VALUES ($1, $2)
         RETURNING id
         "#,
-        id,
+        Uuid::new_v4(),
         user.username,
     )
     .fetch_one(pool.get_ref())
@@ -44,9 +43,8 @@ pub async fn create_user(
         HttpResponse::InternalServerError().finish()
     })?;
 
-    //Ok(HttpResponse::Ok().finish())
     Ok(HttpResponse::Ok().json(UserId {
-        id: id,
+        id: row.id,
     }))
 }
 
@@ -76,7 +74,7 @@ pub async fn get_all_users(
         users.push(user);
     }
 
-    Ok(HttpResponse::Ok().json(users)) // <- send response
+    Ok(HttpResponse::Ok().json(users))
 }
 
 pub async fn get_user_by_id(
@@ -85,7 +83,7 @@ pub async fn get_user_by_id(
 ) -> Result<HttpResponse, HttpResponse>  {
 
     let id:Uuid = req.match_info().get("id").unwrap().parse().unwrap();
-    //let id = Uuid::new_v4();
+
     let row = sqlx::query!(
         r#"
         SELECT id, username
@@ -108,16 +106,48 @@ pub async fn get_user_by_id(
 }
 
 pub async fn update_user(
-    user: web::Json<UserData>,
+    user: web::Json<User>,
     pool: web::Data<PgPool>
 ) -> Result<HttpResponse, HttpResponse>  {
+
+    sqlx::query!(
+        r#"
+        UPDATE users
+        SET username = $1
+        WHERE id = $2
+        "#,
+        user.username,
+        user.id
+    )
+    .fetch_one(pool.get_ref())
+    .await
+    .map_err(|e| {
+        eprintln!("Failed to execute query: {}", e);
+        HttpResponse::InternalServerError().finish()
+    })?;
+
     Ok(HttpResponse::Ok().finish())
 }
 
 pub async fn delete_user(
-    user: web::Json<UserData>,
+    user: web::Json<User>,
     pool: web::Data<PgPool>
 ) -> Result<HttpResponse, HttpResponse>  {
+
+    sqlx::query!(
+        r#"
+        DELETE FROM users
+        WHERE id = $1
+        "#,
+        user.id
+    )
+    .fetch_one(pool.get_ref())
+    .await
+    .map_err(|e| {
+        eprintln!("Failed to execute query: {}", e);
+        HttpResponse::InternalServerError().finish()
+    })?;
+
     Ok(HttpResponse::Ok().finish())
 }
 

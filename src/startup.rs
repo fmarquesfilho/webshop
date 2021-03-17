@@ -55,14 +55,18 @@ fn run(
         App::new()
             .route("/ping", web::get().to(ping))
             .route("/subscriptions", web::post().to(subscribe))
+            // /cart
             .route("/cart", web::post().to(create_cart))
             .route("/cart/products", web::post().to(add_product_to_cart))
+            // /users
             .route("/users", web::post().to(create_user))
             .route("/users", web::put().to(update_user))
             .route("/users", web::delete().to(delete_user))
             .route("/users", web::get().to(get_all_users))
             .route("/users/{id}", web::get().to(get_user_by_id))
+            // products
             .route("/products", web::post().to(create_product))
+            // app data
             .app_data(db_pool.clone())
     })
     .listen(listener)?
