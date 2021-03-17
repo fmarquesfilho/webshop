@@ -8,8 +8,7 @@ CREATE TABLE subscriptions(
 CREATE TABLE users(
 	   id uuid NOT NULL,
 	   PRIMARY KEY (id),
-	   username TEXT NOT NULL UNIQUE,
-       password TEXT
+	   username TEXT NOT NULL UNIQUE
 );
 
 -- Create Carts Table

@@ -12,11 +12,9 @@ async fn add_product_to_cart_returns_200() {
     // usa a rota /users
     let user = UserData {
         username: String::from("joselito"),
-        password: String::from(""), //temporário
     };
     let mut map = HashMap::new();
     map.insert("username", user.username);
-    map.insert("password", user.password);
 
     let response = client
         .post(&format!("{}/users", &app.address))
