@@ -3,10 +3,33 @@ use webshop::configuration::{get_configuration, DatabaseSettings};
 use webshop::startup::{get_connection_pool, Application};
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
+use webshop::routes::{UserData};
+use std::collections::HashMap;
 
 pub struct TestApp {
     pub address: String,
     pub db_pool: PgPool,
+}
+
+impl TestApp {
+    // cria um novo usuário usando HTTP POST na rota /users
+    // note que o username do usuário é uma String fake gerada automaticamente
+    pub async fn post_users(&self, username: String) -> reqwest::Response {
+        let user = UserData { username };
+        let mut map = HashMap::new();
+        map.insert("username", user.username.clone());
+
+        let client = reqwest::Client::new();
+        let response = client
+            .post(&format!("{}/users", &self.address))
+            .header("Content-Type", "application/json")
+            .json(&map)
+            .send()
+            .await
+            .expect("Failed to execute request.");
+
+        response
+    }
 }
 
 // Cria uma nova instância da API
