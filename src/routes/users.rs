@@ -119,7 +119,7 @@ pub async fn update_user(
         user.username,
         user.id
     )
-    .fetch_one(pool.get_ref())
+    .execute(pool.get_ref())
     .await
     .map_err(|e| {
         eprintln!("Failed to execute query: {}", e);
@@ -130,18 +130,20 @@ pub async fn update_user(
 }
 
 pub async fn delete_user(
-    user: web::Json<User>,
+    req: web::HttpRequest,
     pool: web::Data<PgPool>
 ) -> Result<HttpResponse, HttpResponse>  {
+
+    let id:Uuid = req.match_info().get("id").unwrap().parse().unwrap();
 
     sqlx::query!(
         r#"
         DELETE FROM users
         WHERE id = $1
         "#,
-        user.id
+        id
     )
-    .fetch_one(pool.get_ref())
+    .execute(pool.get_ref())
     .await
     .map_err(|e| {
         eprintln!("Failed to execute query: {}", e);

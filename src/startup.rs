@@ -61,9 +61,9 @@ fn run(
             // /users
             .route("/users", web::post().to(create_user))
             .route("/users", web::put().to(update_user))
-            .route("/users", web::delete().to(delete_user))
             .route("/users", web::get().to(get_all_users))
             .route("/users/{id}", web::get().to(get_user_by_id))
+            .route("/users/{id}", web::delete().to(delete_user))
             // products
             .route("/products", web::post().to(create_product))
             // app data
