@@ -1,13 +1,24 @@
 //! tests/helpers.rs
 use webshop::configuration::{get_configuration, DatabaseSettings};
 use webshop::startup::{get_connection_pool, Application};
+use webshop::telemetry::{get_subscriber, init_subscriber};
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 use webshop::routes::{UserData};
 use std::collections::HashMap;
 
+// Ensure that the `tracing` stack is only initialised once using `lazy_static`
+lazy_static::lazy_static! {
+    static ref TRACING: () = {
+        let filter = if std::env::var("TEST_LOG").is_ok() { "debug" } else { "" };
+        let subscriber = get_subscriber("test".into(), filter.into());
+        init_subscriber(subscriber);
+    };
+}
+
 pub struct TestApp {
     pub address: String,
+    pub port: u16,
     pub db_pool: PgPool,
 }
 
@@ -34,6 +45,8 @@ impl TestApp {
 
 // Cria uma nova instância da API
 pub async fn create_app() -> TestApp {
+    lazy_static::initialize(&TRACING);
+
     // Randomise configuration to ensure test isolation
     let configuration = {
         let mut c = get_configuration().expect("Failed to read configuration.");
@@ -51,11 +64,12 @@ pub async fn create_app() -> TestApp {
     let application = Application::build(configuration.clone())
         .await
         .expect("Failed to build application.");
-    let address = format!("http://localhost:{}", application.port());
+    let application_port = application.port();
     let _ = tokio::spawn(application.run_until_stopped());
 
     TestApp {
-        address,
+        address: format!("http://localhost:{}", application_port),
+        port: application_port,
         db_pool: get_connection_pool(&configuration.database)
             .await
             .expect("Failed to connect to the database"),

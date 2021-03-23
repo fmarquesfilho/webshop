@@ -22,6 +22,7 @@ pub struct UserId {
     pub id: Uuid,
 }
 
+#[tracing::instrument(name = "Create user", skip(user, pool))]
 pub async fn create_user(
     user: web::Json<UserData>,
     pool: web::Data<PgPool>,
@@ -39,7 +40,7 @@ pub async fn create_user(
     .fetch_one(pool.get_ref())
     .await
     .map_err(|e| {
-        eprintln!("Failed to execute query: {}", e);
+        tracing::error!("Failed to execute query: {:?}", e);
         HttpResponse::InternalServerError().finish()
     })?;
 
@@ -48,6 +49,7 @@ pub async fn create_user(
     }))
 }
 
+#[tracing::instrument(name = "Get all users", skip(pool))]
 pub async fn get_all_users(
     pool: web::Data<PgPool>
 ) -> Result<HttpResponse, HttpResponse>  {
@@ -77,6 +79,7 @@ pub async fn get_all_users(
     Ok(HttpResponse::Ok().json(users))
 }
 
+#[tracing::instrument(name = "Get user by id", skip(req, pool))]
 pub async fn get_user_by_id(
     req: web::HttpRequest,
     pool: web::Data<PgPool>
@@ -105,6 +108,7 @@ pub async fn get_user_by_id(
     }))
 }
 
+#[tracing::instrument(name = "Update user", skip(user, pool))]
 pub async fn update_user(
     user: web::Json<User>,
     pool: web::Data<PgPool>
@@ -129,6 +133,7 @@ pub async fn update_user(
     Ok(HttpResponse::Ok().finish())
 }
 
+#[tracing::instrument(name = "Delete user", skip(req, pool))]
 pub async fn delete_user(
     req: web::HttpRequest,
     pool: web::Data<PgPool>

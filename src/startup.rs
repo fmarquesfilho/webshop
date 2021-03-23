@@ -7,6 +7,7 @@ use actix_web::{web, App, HttpServer};
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::net::TcpListener;
+use tracing_actix_web::TracingLogger;
 
 pub struct Application {
     port: u16,
@@ -53,6 +54,7 @@ fn run(
     let db_pool = Data::new(db_pool);
     let server = HttpServer::new(move || {
         App::new()
+            .wrap(TracingLogger)
             .route("/ping", web::get().to(ping))
             .route("/subscriptions", web::post().to(subscribe))
             // /cart
