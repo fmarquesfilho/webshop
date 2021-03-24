@@ -7,4 +7,5 @@ database:
   username: "postgres"
   password: "password"
   database_name: "webshop"
+  require_ssl: false
   
