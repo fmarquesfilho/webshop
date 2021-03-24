@@ -30,6 +30,8 @@ jobs:
           sudo apt-get install libpq-dev -y
           cargo install --version=0.5.1 sqlx-cli --no-default-features --features postgres
           SKIP_DOCKER=true ./scripts/init_db.sh
+      - name: Check sqlx metadata file
+        run: cargo sqlx prepare --check -- --bin webshop
       - uses: actions-rs/cargo@v1
         with:
           command: test

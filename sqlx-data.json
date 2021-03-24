@@ -1,0 +1,181 @@
+{
+  "db": "PostgreSQL",
+  "160a333b34ef3c90b88c95288ed18bcb9ba450d8f497ce726f0b2905ff0eb4c1": {
+    "query": "\n        INSERT INTO carts (id, user_id)\n        VALUES ($1, $2)\n        RETURNING id\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Uuid"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid",
+          "Uuid"
+        ]
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "169eb19bfdac7bf46ec6051018c66abbf27481e7993e9e8cc61043bf90343af4": {
+    "query": "\n        INSERT INTO products (id, name)\n        VALUES ($1, $2)\n        RETURNING id\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Uuid"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid",
+          "Text"
+        ]
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "2722d160ea4a8c22e807edb9b8b183e0336fbbbd8c367eb387bded45c27203a2": {
+    "query": "\n        INSERT INTO cart_items (cart_id, product_id)\n        VALUES ($1, $2)\n        RETURNING cart_id, product_id\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "cart_id",
+          "type_info": "Uuid"
+        },
+        {
+          "ordinal": 1,
+          "name": "product_id",
+          "type_info": "Uuid"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid",
+          "Uuid"
+        ]
+      },
+      "nullable": [
+        false,
+        false
+      ]
+    }
+  },
+  "59432dd6f2daf0e88c8aca245e57b3b7fcdd477794110b3c5b840cedcaf198aa": {
+    "query": "\n        SELECT id, username\n        FROM users\n        WHERE id = $1\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Uuid"
+        },
+        {
+          "ordinal": 1,
+          "name": "username",
+          "type_info": "Text"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid"
+        ]
+      },
+      "nullable": [
+        false,
+        false
+      ]
+    }
+  },
+  "5c423a9cd5866ce580445d8571fce3998f1aef67570e8a3ef42bcfbde7f42566": {
+    "query": "\n        UPDATE users\n        SET username = $1\n        WHERE id = $2\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Uuid"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "9a94a40a923e026c5202df84be1c1fc4472e9d234022eb4a5a529b144ecdbf38": {
+    "query": "\n        INSERT INTO subscriptions (email, name)\n        VALUES ($1, $2)\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "c7608c5d21e457f90a1d8296bf26ac7756f5256c28c0642a5562dfdc2438011e": {
+    "query": "\n        SELECT id, username\n        FROM users\n        ORDER BY id\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Uuid"
+        },
+        {
+          "ordinal": 1,
+          "name": "username",
+          "type_info": "Text"
+        }
+      ],
+      "parameters": {
+        "Left": []
+      },
+      "nullable": [
+        false,
+        false
+      ]
+    }
+  },
+  "c9e7872542beb3ea6c81f537304ab30f2b86b39fe256b96277f4f2ed9134d132": {
+    "query": "\n        INSERT INTO users (id, username)\n        VALUES ($1, $2)\n        RETURNING id\n        ",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Uuid"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid",
+          "Text"
+        ]
+      },
+      "nullable": [
+        false
+      ]
+    }
+  },
+  "e977935abd39104af6e8c08260ed279ea56c634be130661af0aa090117736549": {
+    "query": "\n        DELETE FROM users\n        WHERE id = $1\n        ",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Uuid"
+        ]
+      },
+      "nullable": []
+    }
+  }
+}

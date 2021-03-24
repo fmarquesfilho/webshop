@@ -19,7 +19,7 @@ serde = "1.0.124"
 serde-aux = "1.0.1"
 serde_json = "1"
 config = { version = "0.10.1", default-features = false, features = ["yaml"] }
-sqlx = { version = "0.4.1", default-features = false, features = [ "runtime-async-std-native-tls", "macros", "postgres", "uuid", "migrate", "json"]  }
+sqlx = { version = "0.4.1", default-features = false, features = [ "runtime-async-std-native-tls", "macros", "postgres", "uuid", "migrate", "json", "offline"]  }
 async-std = { version = "1.6", features = [ "attributes" ] }
 uuid = { version = "0.8.2", features = ["v4"] }
 chrono = "0.4"
